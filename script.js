@@ -120,7 +120,11 @@ const DEFAULT_PRODUCTS = [
 ];
 
 // ───── SINCRONIZAÇÃO EM TEMPO REAL NA NUVEM ─────
-let GSTORE_CLOUD_URL = localStorage.getItem('gstore_cloud_url') || 'https://api.jsonbin.io/v3/b/6a9f4692ac6210605ab16dd6';
+const DEFAULT_CLOUD_URL = 'https://api.jsonbin.io/v3/b/6a9f4692ac6210605ab16dd6';
+const DEFAULT_CLOUD_KEY = '$2a$10$jAhxhVLs0rJ2ZZIyDK.NvusJdLlFdW5d0grAkOIQjk./j7G3BDdOe';
+
+let GSTORE_CLOUD_URL = localStorage.getItem('gstore_cloud_url') || DEFAULT_CLOUD_URL;
+let GSTORE_CLOUD_KEY = localStorage.getItem('gstore_cloud_key') || DEFAULT_CLOUD_KEY;
 
 // Carregar estoque sincronizado do localStorage se existir
 function getInventory() {
@@ -134,8 +138,8 @@ function getInventory() {
 let PRODUCTS = getInventory();
 
 async function syncWithCloud() {
-  const cloudUrl = localStorage.getItem('gstore_cloud_url') || GSTORE_CLOUD_URL;
-  const cloudKey = localStorage.getItem('gstore_cloud_key') || '';
+  const cloudUrl = localStorage.getItem('gstore_cloud_url') || DEFAULT_CLOUD_URL;
+  const cloudKey = localStorage.getItem('gstore_cloud_key') || DEFAULT_CLOUD_KEY;
   if (!cloudUrl) return;
   try {
     const headers = {};
