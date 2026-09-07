@@ -199,6 +199,13 @@ function buildGeneralWhatsAppLink() {
 }
 
 
+function fixImagePath(src) {
+  if (!src) return '';
+  if (src.startsWith('data:') || src.startsWith('http://') || src.startsWith('https://')) return src;
+  const filename = src.split('/').pop();
+  return `${UPLOADED_BASE}/${filename}`;
+}
+
 // ───── RENDERIZAÇÃO DA GRID DE PRODUTOS ─────
 function renderProducts(filter = 'Todos') {
   PRODUCTS = getInventory(); // Atualizar estoque mais recente
@@ -215,13 +222,14 @@ function renderProducts(filter = 'Todos') {
   }
 
   grid.innerHTML = filtered.map(product => {
-    const mainImg = (product.images && product.images.length > 0) ? product.images[0] : (product.image || '');
+    const rawImg = (product.images && product.images.length > 0) ? product.images[0] : (product.image || '');
+    const mainImg = fixImagePath(rawImg);
     const imgCount = (product.images && product.images.length > 1) ? product.images.length : 0;
 
     return `
     <article class="product-card" data-product-id="${product.id}">
       <div class="product-card__img-wrap">
-        <img src="${mainImg}" alt="${product.name}" loading="lazy" />
+        <img src="${mainImg}" alt="${product.name}" loading="lazy" />`
         <span class="product-card__badge ${product.available ? 'product-card__badge--available' : 'product-card__badge--sold'}">
           ${product.available ? 'Disponível' : 'Vendido'}
         </span>
@@ -448,9 +456,9 @@ function openProductModal(productId) {
     buyBtn.querySelector('span').textContent = 'Produto Indisponível (Vendido)';
   }
 
-  const imagesList = (product.images && product.images.length > 0)
+  const imagesList = ((product.images && product.images.length > 0)
     ? product.images
-    : [product.image];
+    : [product.image]).map(fixImagePath);
   setupCarousel(imagesList);
 
   const backdrop = document.getElementById('modal-backdrop');
