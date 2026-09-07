@@ -119,6 +119,9 @@ const DEFAULT_PRODUCTS = [
   }
 ];
 
+// ───── SINCRONIZAÇÃO EM TEMPO REAL NA NUVEM ─────
+let GSTORE_CLOUD_URL = localStorage.getItem('gstore_cloud_url') || 'https://api.jsonbin.io/v3/b/6a9f4692ac6210605ab16dd6';
+
 // Carregar estoque sincronizado do localStorage se existir
 function getInventory() {
   const saved = localStorage.getItem('gstore_inventory');
@@ -129,6 +132,45 @@ function getInventory() {
 }
 
 let PRODUCTS = getInventory();
+
+async function syncWithCloud() {
+  const cloudUrl = localStorage.getItem('gstore_cloud_url') || GSTORE_CLOUD_URL;
+  const cloudKey = localStorage.getItem('gstore_cloud_key') || '';
+  if (!cloudUrl) return;
+  try {
+    const headers = {};
+    if (cloudKey) {
+      headers['X-Master-Key'] = cloudKey;
+      headers['X-Access-Key'] = cloudKey;
+    }
+
+    const res = await fetch(cloudUrl, { cache: 'no-store', headers });
+    if (res.ok) {
+      const data = await res.json();
+      let items = null;
+
+      if (Array.isArray(data)) {
+        items = data;
+      } else if (data && Array.isArray(data.record)) {
+        items = data.record;
+      } else if (data && Array.isArray(data.products)) {
+        items = data.products;
+      } else if (data && typeof data === 'object') {
+        const values = Object.values(data);
+        if (values.length > 0 && values[0].name) items = values;
+      }
+
+      if (Array.isArray(items) && items.length > 0) {
+        PRODUCTS = items;
+        localStorage.setItem('gstore_inventory', JSON.stringify(items));
+        renderProducts();
+        initFilters();
+      }
+    }
+  } catch(err) {
+    console.log('[G. Store Cloud] Usando estoque em cache local');
+  }
+}
 
 
 // ───── UTILITÁRIOS ─────
@@ -512,4 +554,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initWhatsAppLinks();
   initCarouselEvents();
   initModalEvents();
+  syncWithCloud();
 });
