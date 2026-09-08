@@ -1,16 +1,22 @@
 /* ===================================
    G. STORE — JAVASCRIPT
    
-   ✏️ ESTOQUE REAL DA LOJA & SINCRONIZAÇÃO
+   🛒 CATÁLOGO DE PRODUTOS ORIGINAIS
    =================================== */
 
 // ───── CONFIGURAÇÕES ─────
 const WHATSAPP_NUMBER = '5511947169791'; // Número oficial da G. Store
-
 const UPLOADED_BASE = 'img';
 
-// ───── ESTOQUE INICIAL PADRÃO ─────
-const DEFAULT_PRODUCTS = [
+// Limpar resquícios de sincronizações antigas se houver no navegador
+try {
+  localStorage.removeItem('gstore_inventory');
+  localStorage.removeItem('gstore_cloud_url');
+  localStorage.removeItem('gstore_cloud_key');
+} catch(e) {}
+
+// ───── ESTOQUE OFICIAL DA LOJA (4 PRODUTOS ORIGINAIS) ─────
+const PRODUCTS = [
   {
     id: 'jaqueta-tommy-hilfiger-black',
     name: 'Jaqueta Tommy Hilfiger Lightweight',
@@ -22,11 +28,11 @@ const DEFAULT_PRODUCTS = [
     price: 670.00,
     available: true,
     images: [
-      `${UPLOADED_BASE}/media_1788732999145.jpg`,
-      `${UPLOADED_BASE}/media_1788732999127.jpg`,
-      `${UPLOADED_BASE}/media_1788732999140.jpg`,
-      `${UPLOADED_BASE}/media_1788732999163.jpg`,
-      `${UPLOADED_BASE}/media_1788732999176.jpg`
+      'img/media_1788732999145.jpg',
+      'img/media_1788732999127.jpg',
+      'img/media_1788732999140.jpg',
+      'img/media_1788732999163.jpg',
+      'img/media_1788732999176.jpg'
     ],
     description: 'Jaqueta Tommy Hilfiger Original na cor preta. Modelo leve com isolamento térmico (Lightweight Insulation), resistente ao vento e à água (Wind & Water Resistant). Possui estampa discreta HILFIGER na gola, patch emborrachado com bandeira clássica na manga e bolsos com zíper.',
     specs: [
@@ -50,8 +56,8 @@ const DEFAULT_PRODUCTS = [
     price: 349.99,
     available: true,
     images: [
-      `${UPLOADED_BASE}/media_1788733377289.jpg`,
-      `${UPLOADED_BASE}/media_1788733389232.jpg`
+      'img/media_1788733377289.jpg',
+      'img/media_1788733389232.jpg'
     ],
     description: 'Moletom Gola Careca (Crewneck) Champion Original na cor branca. Possui bordado exclusivo no peito, patch clássico do logo "C" da Champion no punho da manga e etiqueta original anexada.',
     specs: [
@@ -75,10 +81,10 @@ const DEFAULT_PRODUCTS = [
     price: 349.99,
     available: true,
     images: [
-      `${UPLOADED_BASE}/media_1788816686257.jpg`,
-      `${UPLOADED_BASE}/media_1788816686239.jpg`,
-      `${UPLOADED_BASE}/media_1788816686210.jpg`,
-      `${UPLOADED_BASE}/media_1788816686226.jpg`
+      'img/media_1788816686257.jpg',
+      'img/media_1788816686239.jpg',
+      'img/media_1788816686210.jpg',
+      'img/media_1788816686226.jpg'
     ],
     description: 'Camisa Oficial Nike Tottenham Hotspur Third. Design exclusivo em tom verde camuflado gráfico, com o lendário Swoosh duplo da Nike na vertical, escudo especial bordado com a mensagem "Audere-Est-Facere" e selo de autenticidade Nike Engineered.',
     specs: [
@@ -102,9 +108,9 @@ const DEFAULT_PRODUCTS = [
     price: 349.99,
     available: true,
     images: [
-      `${UPLOADED_BASE}/media_1788816970007.jpg`,
-      `${UPLOADED_BASE}/media_1788816969936.jpg`,
-      `${UPLOADED_BASE}/media_1788816969970.jpg`
+      'img/media_1788816970007.jpg',
+      'img/media_1788816969936.jpg',
+      'img/media_1788816969970.jpg'
     ],
     description: 'Camisa Oficial Nike Chelsea FC Special Edition. Estampa geométrica moderna em tons de azul elétrico e preto, com Swoosh Nike dourado, escudo oficial do Chelsea bordado com detalhes em dourado e gravação "LONDON CHELSEA FC" na gola interna.',
     specs: [
@@ -118,63 +124,6 @@ const DEFAULT_PRODUCTS = [
     ]
   }
 ];
-
-// ───── SINCRONIZAÇÃO EM TEMPO REAL NA NUVEM ─────
-const DEFAULT_CLOUD_URL = 'https://api.jsonbin.io/v3/b/6a9f4692ac6210605ab16dd6';
-const DEFAULT_CLOUD_KEY = '$2a$10$jAhxhVLs0rJ2ZZIyDK.NvusJdLlFdW5d0grAkOIQjk./j7G3BDdOe';
-
-let GSTORE_CLOUD_URL = localStorage.getItem('gstore_cloud_url') || DEFAULT_CLOUD_URL;
-let GSTORE_CLOUD_KEY = localStorage.getItem('gstore_cloud_key') || DEFAULT_CLOUD_KEY;
-
-// Carregar estoque sincronizado do localStorage se existir
-function getInventory() {
-  const saved = localStorage.getItem('gstore_inventory');
-  if (saved) {
-    try { return JSON.parse(saved); } catch(e) { }
-  }
-  return DEFAULT_PRODUCTS;
-}
-
-let PRODUCTS = getInventory();
-
-async function syncWithCloud() {
-  const cloudUrl = localStorage.getItem('gstore_cloud_url') || DEFAULT_CLOUD_URL;
-  const cloudKey = localStorage.getItem('gstore_cloud_key') || DEFAULT_CLOUD_KEY;
-  if (!cloudUrl) return;
-  try {
-    const headers = {};
-    if (cloudKey) {
-      headers['X-Master-Key'] = cloudKey;
-      headers['X-Access-Key'] = cloudKey;
-    }
-
-    const res = await fetch(cloudUrl, { cache: 'no-store', headers });
-    if (res.ok) {
-      const data = await res.json();
-      let items = null;
-
-      if (Array.isArray(data)) {
-        items = data;
-      } else if (data && Array.isArray(data.record)) {
-        items = data.record;
-      } else if (data && Array.isArray(data.products)) {
-        items = data.products;
-      } else if (data && typeof data === 'object') {
-        const values = Object.values(data);
-        if (values.length > 0 && values[0].name) items = values;
-      }
-
-      if (Array.isArray(items) && items.length > 0) {
-        PRODUCTS = items;
-        localStorage.setItem('gstore_inventory', JSON.stringify(items));
-        renderProducts();
-        initFilters();
-      }
-    }
-  } catch(err) {
-    console.log('[G. Store Cloud] Usando estoque em cache local');
-  }
-}
 
 
 // ───── UTILITÁRIOS ─────
@@ -198,7 +147,6 @@ function buildGeneralWhatsAppLink() {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 }
 
-
 function fixImagePath(src) {
   if (!src) return '';
   if (src.startsWith('data:') || src.startsWith('http://') || src.startsWith('https://')) return src;
@@ -208,7 +156,6 @@ function fixImagePath(src) {
 
 // ───── RENDERIZAÇÃO DA GRID DE PRODUTOS ─────
 function renderProducts(filter = 'Todos') {
-  PRODUCTS = getInventory(); // Atualizar estoque mais recente
   const grid = document.getElementById('product-grid');
   if (!grid) return;
 
@@ -229,7 +176,7 @@ function renderProducts(filter = 'Todos') {
     return `
     <article class="product-card" data-product-id="${product.id}">
       <div class="product-card__img-wrap">
-        <img src="${mainImg}" alt="${product.name}" loading="lazy" />`
+        <img src="${mainImg}" alt="${product.name}" loading="lazy" />
         <span class="product-card__badge ${product.available ? 'product-card__badge--available' : 'product-card__badge--sold'}">
           ${product.available ? 'Disponível' : 'Vendido'}
         </span>
@@ -404,7 +351,6 @@ function handleSwipe() {
 
 // ───── GERENCIAMENTO DO MODAL DO PRODUTO ─────
 function openProductModal(productId) {
-  PRODUCTS = getInventory();
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
 
@@ -522,7 +468,6 @@ function initFilters() {
   const bar = document.getElementById('filter-bar');
   if (!bar) return;
 
-  PRODUCTS = getInventory();
   const brands = ['Todos', ...new Set(PRODUCTS.map(p => p.brand))];
 
   bar.innerHTML = brands.map(brand => `
@@ -550,21 +495,12 @@ function initWhatsAppLinks() {
   });
 }
 
-// Sincronizar em tempo real entre abas do navegador (Admin -> Loja)
-window.addEventListener('storage', (e) => {
-  if (e.key === 'gstore_inventory') {
-    renderProducts();
-    initFilters();
-  }
-});
 
-
-// ───── INIT ─────
+// ───── INICIALIZAÇÃO PÁGINA ─────
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
   initFilters();
   initWhatsAppLinks();
   initCarouselEvents();
   initModalEvents();
-  syncWithCloud();
 });
