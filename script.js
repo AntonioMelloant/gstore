@@ -122,6 +122,33 @@ const PRODUCTS = [
       'Pix: R$ 349,99',
       'Cartão: R$ 429,99 (até 12x sem juros)'
     ]
+  },
+  {
+    id: 'moletom-jordan-flight-club-beige',
+    name: 'Moletom Jordan Flight Club Bege',
+    brand: 'Jordan',
+    category: 'Moletom',
+    size: 'G',
+    pricePix: 379.99,
+    priceCredit: 419.99,
+    price: 379.99,
+    available: true,
+    images: [
+      'img/media_1788980963604.jpg',
+      'img/media_1788980963486.jpg',
+      'img/media_1788980963501.jpg',
+      'img/media_1788980963515.jpg'
+    ],
+    description: 'Moletom Gola Careca (Crewneck) Jordan Original na cor bege/caqui. Edição especial "OFFICIAL MEMBER AIR JORDAN FLIGHT CLUB" com a icônica logo Jumpman em destaque, assinatura gravada de Michael Jordan e etiqueta original de fábrica anexada.',
+    specs: [
+      'Tamanho: G',
+      'Condição: Novo com etiqueta original',
+      'Modelo: Gola Careca (Crewneck) / Jordan Flight Club',
+      'Detalhes: Estampa Official Member + Logo Jumpman + Assinatura Michael Jordan',
+      'Cor: Bege / Caqui',
+      'Pix: R$ 379,99',
+      'Cartão: R$ 419,99 (até 12x sem juros)'
+    ]
   }
 ];
 

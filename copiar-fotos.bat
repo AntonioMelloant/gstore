@@ -39,8 +39,15 @@ copy /y "%SRC%\media_1788816969970.jpg" "%DST%\"
 copy /y "%SRC%\media_1788816970007.jpg" "%DST%\"
 
 echo.
+echo [Moletom Jordan Flight Club - 4 fotos]
+copy /y "%SRC%\media_1788980963486.jpg" "%DST%\"
+copy /y "%SRC%\media_1788980963501.jpg" "%DST%\"
+copy /y "%SRC%\media_1788980963515.jpg" "%DST%\"
+copy /y "%SRC%\media_1788980963604.jpg" "%DST%\"
+
+echo.
 echo ==========================================
-echo OK! 15 imagens copiadas (1 logo + 14 fotos de produtos)
+echo OK! 19 imagens copiadas (1 logo + 18 fotos de produtos)
 echo Agora suba a pasta g-store inteira para o Vercel!
 echo ==========================================
 pause
