@@ -5,7 +5,7 @@
    =================================== */
 
 // ───── CONFIGURAÇÕES ─────
-const WHATSAPP_NUMBER = '5511947169791'; // Número oficial da G. Store
+const WHATSAPP_NUMBER = '5511991899436'; // Número oficial da G. Store
 const UPLOADED_BASE = 'img';
 
 // Limpar resquícios de sincronizações antigas se houver no navegador
