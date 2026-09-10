@@ -158,11 +158,10 @@ function formatPrice(value) {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-function buildWhatsAppLink(productName, productSize, pricePix, priceCredit) {
+function buildWhatsAppLink(productName, productSize) {
   const sizeText = productSize ? ` (Tam: ${productSize})` : '';
-  const priceText = pricePix ? ` por R$ ${pricePix.toFixed(2).replace('.', ',')} no Pix ou R$ ${priceCredit ? priceCredit.toFixed(2).replace('.', ',') : ''} no Crédito (até 12x sem juros)` : '';
   const message = encodeURIComponent(
-    `Olá! Vi o produto *${productName}*${sizeText}${priceText} no site da G. Store e tenho interesse. Ainda está disponível?`
+    `Olá! Vi o produto *${productName}*${sizeText} no site da G. Store e tenho interesse. Ainda está disponível?`
   );
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 }
@@ -420,7 +419,7 @@ function openProductModal(productId) {
 
   const buyBtn = document.getElementById('modal-whatsapp-btn');
   if (product.available) {
-    buyBtn.href = buildWhatsAppLink(product.name, product.size, product.pricePix, product.priceCredit);
+    buyBtn.href = buildWhatsAppLink(product.name, product.size);
     buyBtn.classList.remove('modal-buy-btn--disabled');
     buyBtn.querySelector('span').textContent = 'Falar no WhatsApp para Comprar';
   } else {
