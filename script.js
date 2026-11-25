@@ -149,6 +149,50 @@ const PRODUCTS = [
       'Pix: R$ 379,99',
       'Cartão: R$ 419,99 (até 12x sem juros)'
     ]
+  },
+  {
+    id: 'moletom-celani-halfzip-preto',
+    name: 'Moletom Celani Half-Zip Preto',
+    brand: 'Celani',
+    category: 'Moletom',
+    size: 'G',
+    pricePix: 139.99,
+    priceCredit: 139.99,
+    price: 139.99,
+    available: true,
+    images: [
+      'img/media_1795645181275_d95e1322.jpg'
+    ],
+    description: 'Moletom Celani Original na cor preta. Modelo Half-Zip com zíper parcial e gola alta, design minimalista e clean. Etiqueta original Celani anexada.',
+    specs: [
+      'Tamanho: G',
+      'Condição: Novo com etiqueta original',
+      'Modelo: Half-Zip (zíper parcial com gola alta)',
+      'Cor: Preto',
+      'Pix / Cartão: R$ 139,99'
+    ]
+  },
+  {
+    id: 'moletom-celani-halfzip-branco-p',
+    name: 'Moletom Celani Half-Zip Branco',
+    brand: 'Celani',
+    category: 'Moletom',
+    size: 'P / G',
+    pricePix: 139.99,
+    priceCredit: 139.99,
+    price: 139.99,
+    available: true,
+    images: [
+      'img/media_1795645181289_445a5096.jpg'
+    ],
+    description: 'Moletom Celani Original na cor branca/off-white. Modelo Half-Zip com zíper parcial e gola alta, design minimalista e clean. Disponível nos tamanhos P e G. Etiqueta original Celani anexada.',
+    specs: [
+      'Tamanhos disponíveis: P e G',
+      'Condição: Novo com etiqueta original',
+      'Modelo: Half-Zip (zíper parcial com gola alta)',
+      'Cor: Branco / Off-White',
+      'Pix / Cartão: R$ 139,99'
+    ]
   }
 ];
 
