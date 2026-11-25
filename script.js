@@ -157,7 +157,7 @@ const PRODUCTS = [
     category: 'Moletom',
     size: 'G',
     pricePix: 139.99,
-    priceCredit: 139.99,
+    priceCredit: 180.00,
     price: 139.99,
     available: true,
     images: [
@@ -169,7 +169,8 @@ const PRODUCTS = [
       'Condição: Novo com etiqueta original',
       'Modelo: Half-Zip (zíper parcial com gola alta)',
       'Cor: Preto',
-      'Pix / Cartão: R$ 139,99'
+      'Pix: R$ 139,99',
+      'Cartão: R$ 180,00 (até 12x sem juros)'
     ]
   },
   {
@@ -179,7 +180,7 @@ const PRODUCTS = [
     category: 'Moletom',
     size: 'P / G',
     pricePix: 139.99,
-    priceCredit: 139.99,
+    priceCredit: 180.00,
     price: 139.99,
     available: true,
     images: [
@@ -191,7 +192,8 @@ const PRODUCTS = [
       'Condição: Novo com etiqueta original',
       'Modelo: Half-Zip (zíper parcial com gola alta)',
       'Cor: Branco / Off-White',
-      'Pix / Cartão: R$ 139,99'
+      'Pix: R$ 139,99',
+      'Cartão: R$ 180,00 (até 12x sem juros)'
     ]
   }
 ];
